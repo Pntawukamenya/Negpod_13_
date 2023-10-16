@@ -7,7 +7,7 @@ function load {
 done
  echo -e "100%\n"
 }
-  echo -e "\n\n***************** Welcome To Registra  ***************\n"
+  echo -e "\n\n***************** Bachelor of Software Engineering cohort list of students  ***************\n"
  echo -n "Starting App "
   load
  file_path="students-list_0923.txt"
@@ -199,12 +199,32 @@ function delete_student {
 
 }
 
+function email_save {
+echo -n "Saving Emails in ASC"
+sleep 0.6
+clear
+./select-emails.sh
+}
+
+emails='student-emails.txt'
+
+function view_email {
+    # Loading message
+    echo -n "Opening Emails preview in ASC Order"
+    load
+    # End of loading
+    cat "$emails"
+    ./main.sh
+}
+
 #app menu 
 echo -e "\n\n Choose What You Want To Do With Our App\n"
 echo "1) Add New Student"
 echo "2) View All Students"
 echo "3) Edit Existing Student"
 echo "4) Delete Student"
+echo "5) Save Student Emails Sorted in ASC"
+echo "6) View All Emails Only in ASC Order"
 echo "8) Exit The Program"
 
 # Allow the user to input their choice with the read function
@@ -226,6 +246,12 @@ case $choice in
     4)
         delete_student
         ;;
+    5)
+        email_save
+        ;;
+    6)
+        view_email
+        ;;
     8)
         exit_main
         ;;
@@ -234,4 +260,3 @@ case $choice in
         ./main.sh
         ;;
 esac
-
