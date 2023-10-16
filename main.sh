@@ -7,7 +7,7 @@ function load {
 done
  echo -e "100%\n"
 }
-  echo -e "\n\n***************** Welcome To Registration office  ***************\n"
+  echo -e "\n\n***************** Welcome To Registra  ***************\n"
  echo -n "Starting App "
   load
  file_path="students-list_0923.txt"
@@ -158,19 +158,61 @@ clear
 fi
 }
 
+function exit_main {
+    #send message for closing app
+    echo -n "Closing App The App Wait For Seconds To Finsh"
+    sleep 0.6
+    clear
+    #kill the main process
+    pkill -f './main.sh'
+    
+}
+
+#---------------------------------------function To Delete student
+function delete_student {
+    #get student Id
+    read -p "Enter The Student Id To Delete: " id
+    #check If file Exists To Avoid Errors
+    if [ -f "$file_path" ]; then
+    #use Grep To Search Student Id that matches the pattern
+        grep -E -n "^\|[[:space:]]*$id[[:space:]]*\|" "$file_path" | while read -r line; do
+        #lines matches including numbers and split them (with line numbers)
+            line_num=$(echo "$line" | cut -d ':' -f 1)
+            #delete the line that matched the search and the next line
+            sed -i "${line_num}d;$(($line_num+1))d" "$file_path"
+        done
+        echo "Deleted row with Student ID: $id"
+
+        echo -e "\n\n **** Preparing Your Preview **** \n\n"
+            load
+        #end of loading 
+        clear
+        view_student
+    else
+        echo "Error: File not found at path: $file_path"
+        echo -e "\n\n **** returning to Home ****\n\n"
+            load
+        #end of loading 
+        clear
+        ./main.sh
+    fi
+
+}
 
 #app menu 
 echo -e "\n\n Choose What You Want To Do With Our App\n"
 echo "1) Add New Student"
 echo "2) View All Students"
 echo "3) Edit Existing Student"
+echo "4) Delete Student"
+echo "8) Exit The Program"
 
-# Allow the user to input their choice with read function
+# Allow the user to input their choice with the read function
 echo -e "\n"
 read -p "Enter Your choice Here: " choice
 echo -e "\n"
 
-# Switch case to call functions according to user need
+# Switch case to call functions according to the user's choice
 case $choice in
     1)
         register
@@ -180,6 +222,12 @@ case $choice in
         ;;
     3)
         update_student
+        ;;
+    4)
+        delete_student
+        ;;
+    8)
+        exit_main
         ;;
     *)
         echo "Invalid choice. Please try again."
